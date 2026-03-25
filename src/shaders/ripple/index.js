@@ -30,3 +30,11 @@ export function createRippleMaterial(sourceMaterial) {
 
   return material;
 }
+
+export function updateRippleMaterial(material, app, time) {
+  material.uniforms.uTime.value = time;
+  material.uniforms.uLightDirection.value
+    .copy(app.runtime.dirLight.position)
+    .sub(app.runtime.dirLight.target.position)
+    .normalize();
+}

@@ -707,6 +707,82 @@ export function createInspectorsModule(app) {
         material.uniforms.uGlow.value = value;
       });
     }
+    if (material.userData?.materialPreset === "shader-water" && material.uniforms) {
+      createInspectorSectionTitle("自定义 Shader 参数");
+      createInfoRow("当前 Shader", material.userData?.shaderLabel || "流动水");
+
+      createColorControl("深水颜色", `#${material.uniforms.uDeepColor.value.getHexString()}`, (value) => {
+        material.uniforms.uDeepColor.value.set(value);
+      });
+
+      createColorControl("浅水颜色", `#${material.uniforms.uShallowColor.value.getHexString()}`, (value) => {
+        material.uniforms.uShallowColor.value.set(value);
+      });
+
+      createColorControl("高光颜色", `#${material.uniforms.uHighlightColor.value.getHexString()}`, (value) => {
+        material.uniforms.uHighlightColor.value.set(value);
+      });
+
+      createNumberControl("流速 uFlowSpeed", material.uniforms.uFlowSpeed.value, 0, 4, 0.01, (value) => {
+        material.uniforms.uFlowSpeed.value = value;
+      });
+
+      createNumberControl("噪声密度 uNoiseScale", material.uniforms.uNoiseScale.value, 0.1, 6, 0.01, (value) => {
+        material.uniforms.uNoiseScale.value = value;
+      });
+
+      createNumberControl(
+        "法线扰动 uNormalStrength",
+        material.uniforms.uNormalStrength.value,
+        0,
+        5,
+        0.01,
+        (value) => {
+          material.uniforms.uNormalStrength.value = value;
+        }
+      );
+
+      createNumberControl(
+        "表面起伏 uSurfaceMotion",
+        material.uniforms.uSurfaceMotion.value,
+        0,
+        0.2,
+        0.001,
+        (value) => {
+          material.uniforms.uSurfaceMotion.value = value;
+        }
+      );
+
+      createNumberControl(
+        "菲涅耳强度 uFresnelPower",
+        material.uniforms.uFresnelPower.value,
+        0,
+        8,
+        0.01,
+        (value) => {
+          material.uniforms.uFresnelPower.value = value;
+        }
+      );
+
+      createNumberControl(
+        "镜面强度 uSpecularStrength",
+        material.uniforms.uSpecularStrength.value,
+        0,
+        4,
+        0.01,
+        (value) => {
+          material.uniforms.uSpecularStrength.value = value;
+        }
+      );
+
+      createNumberControl("透明度 uOpacity", material.uniforms.uOpacity.value, 0, 1, 0.01, (value) => {
+        material.uniforms.uOpacity.value = value;
+      });
+
+      createNumberControl("泡沫强度 uFoamAmount", material.uniforms.uFoamAmount.value, 0, 2, 0.01, (value) => {
+        material.uniforms.uFoamAmount.value = value;
+      });
+    }
   }
 
   function renderLightInspector() {

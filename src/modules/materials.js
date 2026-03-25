@@ -1,6 +1,10 @@
 import * as THREE from "three";
 
-import { createRippleMaterial } from "../shaders/ripple/index.js";
+import {
+  createCustomShaderMaterial,
+  isCustomShaderPreset,
+  updateCustomShaderMaterial,
+} from "../shaders/index.js";
 
 export function createMaterialsModule(app) {
   function getPrimaryMaterial(material) {
@@ -222,8 +226,8 @@ export function createMaterialsModule(app) {
       material = new THREE.MeshPhysicalMaterial();
     }
 
-    if (presetKey === "shader-ripple") {
-      return createRippleMaterial(sourceMaterial);
+    if (isCustomShaderPreset(presetKey)) {
+      return createCustomShaderMaterial(presetKey, sourceMaterial);
     }
 
     if (!material) {
@@ -290,14 +294,11 @@ export function createMaterialsModule(app) {
       }
 
       const material = getPrimaryMaterial(child.material);
-      if (!material || material.userData?.materialPreset !== "shader-ripple") {
+      if (!material || !isCustomShaderPreset(material.userData?.materialPreset)) {
         return;
       }
 
-      material.uniforms.uTime.value = performance.now() * 0.001;
-      material.uniforms.uLightDirection.value
-        .copy(app.runtime.dirLight.position)
-        .normalize();
+      updateCustomShaderMaterial(material, app, performance.now() * 0.001);
     });
   }
 
